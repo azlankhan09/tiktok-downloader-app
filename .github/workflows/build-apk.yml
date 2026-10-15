@@ -1,0 +1,31 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Unzip Flutter project
+        run: |
+          mkdir -p flutter-app
+          unzip -q tiktok-downloader-app.zip -d flutter-app
+          chmod +x flutter-app/android/gradlew
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: cd flutter-app && flutter pub get
+      - name: Build debug APK
+        run: cd flutter-app && flutter build apk --debug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-downloader-debug-apk
+          path: flutter-app/build/app/outputs/flutter-apk/app-debug.apk
