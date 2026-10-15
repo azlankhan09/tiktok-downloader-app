@@ -24,8 +24,15 @@ jobs:
         run: cd flutter-app && flutter pub get
       - name: Build debug APK
         run: cd flutter-app && flutter build apk --debug
+      - name: Build release APK
+        run: cd flutter-app && flutter build apk --release
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: tiktok-downloader-debug-apk
           path: flutter-app/build/app/outputs/flutter-apk/app-debug.apk
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-downloader-release-apk
+          path: flutter-app/build/app/outputs/flutter-apk/app-release.apk
